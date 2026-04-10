@@ -1,3 +1,4 @@
+import { motion, AnimatePresence } from "motion/react";
 import { ExternalLink, Github, X } from "lucide-react";
 import { Card, CardContent } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
@@ -33,10 +34,15 @@ export default function Projects() {
   return (
     <section id="projects" className="py-32 px-6 max-w-7xl mx-auto">
       <div className="mb-24">
-        <div className="flex items-center gap-4 mb-6">
+        <motion.div
+          initial={{ opacity: 0, x: -20 }}
+          whileInView={{ opacity: 1, x: 0 }}
+          viewport={{ once: true }}
+          className="flex items-center gap-4 mb-6"
+        >
           <div className="h-[2px] w-12 bg-primary" />
           <span className="text-[10px] font-bold tracking-[0.4em] uppercase text-primary text-glow">Project_Manifest</span>
-        </div>
+        </motion.div>
         <h2 className="text-5xl md:text-8xl font-black tracking-tighter mb-8 uppercase">
           System <span className="text-muted-foreground">Output</span>
         </h2>
@@ -59,65 +65,83 @@ export default function Projects() {
       </div>
 
       <div className="grid grid-cols-1 md:grid-cols-2 gap-px bg-border border border-border">
-        {filteredProjects.map((project, index) => (
-          <div
-            key={project.title}
-            className="bg-background p-8 md:p-12 group relative overflow-hidden hover:bg-primary/5 transition-colors duration-300"
-          >
-            <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-100 transition-opacity duration-300">
-              <span className="text-[40px] font-black text-primary/20 leading-none">0{projects.indexOf(project) + 1}</span>
-            </div>
-
-            <div className="relative z-10">
-              <div className="flex flex-wrap gap-2 mb-8">
-                {project.tags.map((tag) => (
-                  <span key={tag} className="text-[9px] uppercase tracking-widest font-bold text-primary/60">
-                    #{tag}
-                  </span>
-                ))}
+        <AnimatePresence mode="popLayout">
+          {filteredProjects.map((project, index) => (
+            <motion.div
+              layout
+              key={project.title}
+              initial={{ opacity: 0, y: 30 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true, margin: "-100px" }}
+              transition={{ 
+                duration: 0.5, 
+                delay: index * 0.1,
+                ease: [0.22, 1, 0.36, 1]
+              }}
+              exit={{ opacity: 0, scale: 0.95 }}
+              className="bg-background p-8 md:p-12 group relative overflow-hidden hover:bg-primary/5 transition-colors duration-300"
+            >
+              <div className="absolute top-0 right-0 p-4 opacity-10 group-hover:opacity-100 transition-opacity duration-300">
+                <span className="text-[40px] font-black text-primary/20 leading-none">0{projects.indexOf(project) + 1}</span>
               </div>
 
-              <h3 className="text-3xl md:text-5xl font-black mb-6 uppercase group-hover:text-primary transition-colors duration-300">
-                {project.title}
-              </h3>
-              
-              <p className="text-muted-foreground text-lg mb-10 leading-relaxed font-light">
-                {project.description}
-              </p>
+              <motion.div 
+                className="relative z-10"
+                initial={{ opacity: 0 }}
+                whileInView={{ opacity: 1 }}
+                viewport={{ once: true }}
+                transition={{ delay: index * 0.1 + 0.2 }}
+              >
+                <div className="flex flex-wrap gap-2 mb-8">
+                  {project.tags.map((tag) => (
+                    <span key={tag} className="text-[9px] uppercase tracking-widest font-bold text-primary/60">
+                      #{tag}
+                    </span>
+                  ))}
+                </div>
 
-              <div className="flex items-center gap-6">
-                <a 
-                  href={project.link} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-primary hover:text-glow transition-all"
-                >
-                  Launch_App
-                  <ExternalLink size={14} />
-                </a>
-                <a 
-                  href={project.github} 
-                  target="_blank" 
-                  rel="noopener noreferrer"
-                  className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground hover:text-white transition-all"
-                >
-                  Source_Code
-                  <Github size={14} />
-                </a>
+                <h3 className="text-3xl md:text-5xl font-black mb-6 uppercase group-hover:text-primary transition-colors duration-300">
+                  {project.title}
+                </h3>
+                
+                <p className="text-muted-foreground text-lg mb-10 leading-relaxed font-light">
+                  {project.description}
+                </p>
+
+                <div className="flex items-center gap-6">
+                  <a 
+                    href={project.link} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-primary hover:text-glow transition-all"
+                  >
+                    Launch_App
+                    <ExternalLink size={14} />
+                  </a>
+                  <a 
+                    href={project.github} 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    className="flex items-center gap-2 text-[10px] font-bold uppercase tracking-[0.2em] text-muted-foreground hover:text-white transition-all"
+                  >
+                    Source_Code
+                    <Github size={14} />
+                  </a>
+                </div>
+              </motion.div>
+
+              <div className="mt-12 relative aspect-video overflow-hidden border border-border group-hover:border-primary/30 transition-colors">
+                <img
+                  src={project.image}
+                  alt={project.title}
+                  referrerPolicy="no-referrer"
+                  className="object-cover w-full h-full"
+                />
+                <div className="absolute inset-0 bg-primary/5 mix-blend-overlay" />
               </div>
-            </div>
-
-            <div className="mt-12 relative aspect-video overflow-hidden border border-border group-hover:border-primary/30 transition-colors">
-              <img
-                src={project.image}
-                alt={project.title}
-                referrerPolicy="no-referrer"
-                className="object-cover w-full h-full"
-              />
-              <div className="absolute inset-0 bg-primary/5 mix-blend-overlay" />
-            </div>
-          </div>
-        ))}
+            </motion.div>
+          ))}
+        </AnimatePresence>
       </div>
     </section>
   );
