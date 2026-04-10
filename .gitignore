@@ -1,0 +1,16 @@
+node_modules/
+build/
+dist/
+coverage/
+.DS_Store
+*.log
+.env.example
+
+emailjs.send(
+  import.meta.env.VITE_EMAILJS_SERVICE_ID,
+  import.meta.env.VITE_EMAILJS_TEMPLATE_ID,
+  templateParams,
+  import.meta.env.VITE_EMAILJS_PUBLIC_KEY
+)VITE_EMAILJS_SERVICE_ID=service_2p231z6
+VITE_EMAILJS_TEMPLATE_ID=template_tkz9puq
+VITE_EMAILJS_PUBLIC_KEY=f51_I-0q2k4oV56w7
